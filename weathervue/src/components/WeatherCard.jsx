@@ -1,23 +1,23 @@
 import { useState } from "react";
 import { useEffect } from "react";
 
-function WeatherCard() {
+function WeatherCard({searchInput}) {
   const [weatherData, setWeatherData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetch(
-        "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/London,UK?key=RZ2MPVLFWPHPNG4Z2ARL7CGGH"
+        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchInput}?key=RZ2MPVLFWPHPNG4Z2ARL7CGGH`
       );
       const data = await res.json();
       console.log(data);
       setWeatherData([data]);
     };
     fetchData();
-  }, []);
+  }, [searchInput]);
   console.log(weatherData);
   return (
-    <div className="mx-auto max-w-lg  rounded-xl shadow-lg overflow-hidden bg-neutral-900 text-white">
+    <div className="mx-auto max-w-lg  rounded-xl shadow-lg overflow-hidden bg-neutral-900 text-white min-h-32">
       {weatherData?.map((W, indx) => (
         <div key={indx} className="px-6 py-4 text-white">
           <div className="flex justify-between">
@@ -26,11 +26,11 @@ function WeatherCard() {
           </div>
 
           <div className="flex items-center justify-center mt-4">
-            {/* <img
-              src={W.currentConditions.icon}
+          
+            <img
+              src={`images/${W.currentConditions.icon}.png`} 
               alt="Weather Icon"
-              className="w-12 h-12"
-            /> */}
+              className="w-12 h-12"/>
             <div className="flex flex-col gap-2 mb-6">
               <h1 className="text-6xl font-bold  ml-4">
                 {(((W.currentConditions.temp - 32) * 5) / 9).toFixed(0)} °C
@@ -61,11 +61,6 @@ function WeatherCard() {
           </div>
         </div>
       ))}
-
-      {/* Additional details section - you can customize this */}
-      <div className=" px-6 py-4">
-        {/* Add more details like humidity, wind, etc. */}
-      </div>
     </div>
   );
 }
